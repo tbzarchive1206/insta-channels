@@ -1,3 +1,4 @@
+import { MemberName } from "./MemberName";
 import { useMemo, useState } from "react";
 
 type Media = { id: string; kind: "image" | "audio" | "video" | "other"; mimeType: string; date: number; year: number; month: number };
@@ -52,7 +53,7 @@ export function InstaChannelArchive({ data }: { data: Archive }) {
 
     {!collection ? <section className="member-picker insta-picker channel-picker">
       <div className="picker-head"><p>SELECT A PROFILE · {data.profiles.length} PROFILES</p><a href={folderUrl(data.sourceFolderId)} target="_blank" rel="noreferrer">OPEN SOURCE FOLDER ↗</a></div>
-      <div className={`member-grid profile-count-${data.profiles.length}`}>{data.profiles.map((item, index) => <button key={item.id} onClick={() => chooseCollection(item)}><span>{String(index + 1).padStart(2, "0")}</span><strong>{item.name.toUpperCase()}</strong><small>{item.media.length.toLocaleString("en-US")} MEDIA FILES →</small></button>)}</div>
+      <div className={`member-grid profile-count-${data.profiles.length}`}>{data.profiles.map((item, index) => <button key={item.id} onClick={() => chooseCollection(item)}><span>{String(index + 1).padStart(2, "0")}</span><strong><MemberName name={item.name} /></strong><small>{item.media.length.toLocaleString("en-US")} MEDIA FILES →</small></button>)}</div>
     </section> : <section className="member-gallery insta-gallery">
       <header className="member-gallery-head"><button onClick={() => setCollection(null)}>← ALL PROFILES</button><div><span>INSTAGRAM CHANNEL / PROFILE</span><h2>{collection.name.toUpperCase()}</h2></div><a href={folderUrl(collection.id)} target="_blank" rel="noreferrer">OPEN FOLDER ↗</a></header>
       <div className="member-filters"><label>YEAR<select value={year} onChange={(event) => { const nextYear = Number(event.target.value); setYear(nextYear); const nextMonths = [...new Set(collection.media.filter((item) => item.year === nextYear).map((item) => item.month))].sort((a, b) => b - a); if (!nextMonths.includes(month)) setMonth(nextMonths[0] || 1); setShown(pageSize); }}>{years.map((value) => <option key={value}>{value}</option>)}</select></label><label>MONTH<select value={month} onChange={(event) => { setMonth(Number(event.target.value)); setShown(pageSize); }}>{monthNames.map((name, index) => <option key={name} value={index + 1} disabled={!months.includes(index + 1)}>{String(index + 1).padStart(2, "0")} · {name.toUpperCase()}</option>)}</select></label><p>{media.length} RESULTS</p></div>

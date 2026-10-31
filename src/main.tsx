@@ -11,3 +11,5 @@ createRoot(document.getElementById("root")!).render(
     <InstaChannelArchive data={archiveData as Archive} />
   </StrictMode>,
 );
+
+import "./member-responsive.css";
